@@ -6,33 +6,13 @@ import MonthlyExpensesChart from '../components/MonthlyExpensesChart';
 import ExpensesTable from '../components/ExpensesTable';
 import { getFinancialSummary } from '../utils/currencyUtils';
 import { useTransaction } from '../contexts/TransactionContext';
-const desktopOS = [
-  {
-    id: 1,
-    label: 'Windows',
-    value: 72.72,
-  },
-  {
-    id: 2,
-    label: 'OS X',
-    value: 16.38,
-  },
-  {
-    id: 3,
-    label: 'Linux',
-    value: 3.83,
-  },
-  {
-    id: 4,
-    label: 'Chrome OS',
-    value: 2.42,
-  },
-  { id: 5, label: 'Other', value: 4.65 },
-];
+import { getExpensesChartData } from '../utils/dataUtils';
+
 export default function Home() {
   const data = useTransaction();
   const { totalSaving, totalExpenses, totalIncomes } =
     getFinancialSummary(data);
+  const expenseChartData = getExpensesChartData(data, totalExpenses);
   return (
     <Container maxWidth="lg" sx={{ mt: 1 }}>
       <Grid2 container spacing={2}>
@@ -56,7 +36,7 @@ export default function Home() {
       </Grid2>
       <Grid2 container spacing={2} sx={{ mt: 2 }}>
         <Grid2 size={{ xs: 12, md: 5 }}>
-          <ExpensesChart data={desktopOS} />
+          <ExpensesChart data={expenseChartData} />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 7 }}>
           <MonthlyExpensesChart />

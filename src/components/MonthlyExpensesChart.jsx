@@ -107,7 +107,7 @@ export default function MonthlyExpensesChart() {
             label: 'rainfall (mm)',
           },
         ]}
-        height={300}
+        height={400}
       />
     </Card>
   );
