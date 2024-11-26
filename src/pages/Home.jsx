@@ -4,6 +4,8 @@ import { red, teal } from '@mui/material/colors';
 import ExpensesChart from '../components/ExpensesChart';
 import MonthlyExpensesChart from '../components/MonthlyExpensesChart';
 import ExpensesTable from '../components/ExpensesTable';
+import { getFinancialSummary } from '../utils/currencyUtils';
+import { useTransaction } from '../contexts/TransactionContext';
 const desktopOS = [
   {
     id: 1,
@@ -28,17 +30,28 @@ const desktopOS = [
   { id: 5, label: 'Other', value: 4.65 },
 ];
 export default function Home() {
+  const data = useTransaction();
+  const { totalSaving, totalExpenses, totalIncomes } =
+    getFinancialSummary(data);
   return (
     <Container maxWidth="lg" sx={{ mt: 1 }}>
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <NumberCard label={'Avaliable For Saving'} number={29399} />
+          <NumberCard label={'Avaliable For Saving'} number={totalSaving} />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <NumberCard label={'Income'} number={29399} bgcolor={teal['A700']} />
+          <NumberCard
+            label={'Income'}
+            number={totalIncomes}
+            bgcolor={teal['A700']}
+          />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <NumberCard label={'Expenses'} number={29399} bgcolor={red[500]} />
+          <NumberCard
+            label={'Expenses'}
+            number={totalExpenses}
+            bgcolor={red[500]}
+          />
         </Grid2>
       </Grid2>
       <Grid2 container spacing={2} sx={{ mt: 2 }}>

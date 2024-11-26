@@ -63,6 +63,6 @@ const initialData = [
   createData(6, '2024-11-06', 'Freelance project', 'Freelance', 'Income', 500),
   createData(7, '2024-11-07', 'Movie tickets', 'Entertainment', 'Expense', 25),
   createData(8, '2024-11-08', 'Electricity bill', 'Utilities', 'Expense', 80),
+  createData(10, '2024-10-10', 'Gym membership', 'Health', 'Expense', 45),
   createData(9, '2024-11-09', 'Gift for friend', 'Gifts', 'Expense', 30),
-  createData(10, '2024-11-10', 'Gym membership', 'Health', 'Expense', 45),
 ];

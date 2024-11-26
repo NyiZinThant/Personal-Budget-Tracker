@@ -4,7 +4,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import SortIcon from '@mui/icons-material/Sort';
 import { useState, useRef } from 'react';
 import Table from './Table';
-import { filterData, getColumns } from '../utils/dataUtils';
+import { filterData, getColumns, sortDataBy } from '../utils/dataUtils';
 import { useTransaction } from '../contexts/TransactionContext';
 
 export default function ExpensesTable() {
@@ -15,6 +15,12 @@ export default function ExpensesTable() {
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
     modifedDataRef.current = filterData(data, newAlignment);
+  };
+  const handleToggle = () => {
+    modifedDataRef.current = selected
+      ? sortDataBy(modifedDataRef.current)
+      : sortDataBy(modifedDataRef.current, 'date');
+    setSelected((prevSelected) => !prevSelected);
   };
   return (
     <Card variant="outlined" sx={{ padding: 2 }}>
@@ -33,11 +39,7 @@ export default function ExpensesTable() {
           <ToggleButton value="Income">Incomes</ToggleButton>
           <ToggleButton value="Expense">Expenses</ToggleButton>
         </ToggleButtonGroup>
-        <ToggleButton
-          value="check"
-          selected={selected}
-          onChange={() => setSelected((prevSelected) => !prevSelected)}
-        >
+        <ToggleButton value="check" selected={selected} onChange={handleToggle}>
           <SortIcon />
           <Typography component={'p'} sx={{ marginLeft: 1 }}>
             Sort by Date

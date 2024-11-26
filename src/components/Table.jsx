@@ -33,7 +33,7 @@ export default function Table({ columnNames, data }) {
                   key={key}
                   sx={{ bgcolor: key === 'category' && stc(value) }}
                 >
-                  {value}
+                  {key === 'date' ? value.toLocaleDateString('en-CA') : value}
                 </TableCell>
               ))}
             </TableRow>

@@ -6,6 +6,7 @@ export const createData = function (
   type,
   amount
 ) {
+  date = new Date(date);
   return { id, date, description, category, type, amount };
 };
 
@@ -20,6 +21,9 @@ export const filterData = function (data, name) {
 
 export const sortDataBy = function (data, col = 'id') {
   const newData = [...data];
-  newData.sort((a, b) => a[col] - b[col]);
+  newData.sort((a, b) => {
+    console.log(a[col], col);
+    return a[col] - b[col];
+  });
   return newData;
 };
