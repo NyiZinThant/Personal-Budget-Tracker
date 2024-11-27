@@ -13,13 +13,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = [
+  { label: 'Home', link: '/' },
+  { label: 'Add Transaction', link: '/add' },
+];
 
 export default function Nav({ window }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -27,14 +31,17 @@ export default function Nav({ window }) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        Personal Budget Tracker
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+          <ListItem key={item.label} disablePadding>
+            <ListItemButton
+              sx={{ textAlign: 'center' }}
+              onClick={() => navigate(item.link)}
+            >
+              <ListItemText primary={item.label} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -64,12 +71,16 @@ export default function Nav({ window }) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Personal Budget Tracker
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button
+                key={item.label}
+                sx={{ color: '#fff' }}
+                onClick={() => navigate(item.link)}
+              >
+                {item.label}
               </Button>
             ))}
           </Box>

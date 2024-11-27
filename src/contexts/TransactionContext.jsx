@@ -1,11 +1,15 @@
 import { createContext, useContext, useReducer } from 'react';
 import { createData } from '../utils/dataUtils';
 import { v4 as uuidv4 } from 'uuid';
+import { getStoredTransactions, storeTransactions } from '../libs/localStorage';
 const TransactionContext = createContext(null);
 const TransactionDispatchContext = createContext(null);
 
 export function TransactionProvider({ children }) {
-  const [transaction, dispatch] = useReducer(transactionReducer, initialData);
+  const [transaction, dispatch] = useReducer(
+    transactionReducer,
+    getStoredTransactions()
+  );
   return (
     <TransactionContext.Provider value={transaction}>
       <TransactionDispatchContext.Provider value={dispatch}>
@@ -26,7 +30,7 @@ const transactionReducer = function (transactions, action) {
   switch (action.type) {
     case 'added': {
       const id = uuidv4();
-      return [
+      const newTransactions = [
         ...transactions,
         {
           id,
@@ -37,6 +41,8 @@ const transactionReducer = function (transactions, action) {
           amount: action.amount,
         },
       ];
+      storeTransactions(newTransactions);
+      return newTransactions;
     }
   }
 };
