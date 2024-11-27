@@ -34,11 +34,7 @@ const transactionReducer = function (transactions, action) {
         ...transactions,
         {
           id,
-          date: action.date,
-          description: action.description,
-          cateogry: action.category,
-          type: action.type,
-          amount: action.amount,
+          ...action.data,
         },
       ];
       storeTransactions(newTransactions);
