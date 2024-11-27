@@ -8,6 +8,7 @@ import TypeRadioGroup from './TypeRadioGroup';
 import AmountInput from './AmountInput';
 import { useTransactionDispatch } from '../contexts/TransactionContext';
 import { useNavigate } from 'react-router';
+import { categories } from '../utils/dataUtils';
 export default function TransactionForm() {
   const navigate = useNavigate();
   const transactionDispatch = useTransactionDispatch();
@@ -102,9 +103,11 @@ export default function TransactionForm() {
         innerRef={descriptionInputRef}
         error={errors.description}
       />
+      <TypeRadioGroup type={type} onChange={handleTypeChange} />
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 6 }}>
           <CategorySelect
+            categories={categories[type.toLowerCase()]}
             category={category}
             onChange={handleChange}
             error={errors.category}
@@ -114,7 +117,6 @@ export default function TransactionForm() {
           <DateInput innerRef={dateInputRef} error={errors.date} />
         </Grid2>
       </Grid2>
-      <TypeRadioGroup type={type} onChange={handleTypeChange} />
       <AmountInput innerRef={amountInputRef} error={errors.amount} />
       <Box>
         <Button variant="contained" endIcon={<PublishIcon />} type="submit">

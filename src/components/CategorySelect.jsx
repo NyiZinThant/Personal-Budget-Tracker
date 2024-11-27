@@ -5,9 +5,8 @@ import {
   MenuItem,
   FormHelperText,
 } from '@mui/material';
-import { expenseCategories } from '../utils/dataUtils';
 
-export default function ({ category, onChange, error }) {
+export default function ({ categories, category, onChange, error }) {
   return (
     <FormControl fullWidth error={error !== ''}>
       <InputLabel id="category-select-label">Category</InputLabel>
@@ -18,7 +17,7 @@ export default function ({ category, onChange, error }) {
         label="Categroy"
         onChange={onChange}
       >
-        {expenseCategories.map((cate) => (
+        {categories.map((cate) => (
           <MenuItem value={cate} key={cate}>
             {cate}
           </MenuItem>
