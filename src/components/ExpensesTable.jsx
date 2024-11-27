@@ -12,6 +12,9 @@ export default function ExpensesTable() {
   const [selected, setSelected] = useState(null);
   const data = useTransaction();
   const modifedDataRef = useRef(filterData(data, 'All'));
+  modifedDataRef.current = !selected
+    ? sortDataBy(modifedDataRef.current)
+    : sortDataBy(modifedDataRef.current, 'date');
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
     modifedDataRef.current = filterData(data, newAlignment);
