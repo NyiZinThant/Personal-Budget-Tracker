@@ -16,12 +16,11 @@ export default function TransactionForm() {
     description: '',
     date: '',
     category: '',
-    type: '',
     amount: '',
   });
   const descriptionInputRef = useRef(null);
   const dateInputRef = useRef(null);
-  const [type, setType] = useState('');
+  const [type, setType] = useState('Income');
   const amountInputRef = useRef(null);
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -70,16 +69,6 @@ export default function TransactionForm() {
         return { ...prevErrors, category: '' };
       });
     }
-    if (data.type === '') {
-      setErrors((prevErrors) => {
-        return { ...prevErrors, type: 'Type is empty.' };
-      });
-      hasError = true;
-    } else {
-      setErrors((prevErrors) => {
-        return { ...prevErrors, type: '' };
-      });
-    }
     if (data.amount === '') {
       setErrors((prevErrors) => {
         return { ...prevErrors, amount: 'Amount is empty.' };
@@ -125,11 +114,7 @@ export default function TransactionForm() {
           <DateInput innerRef={dateInputRef} error={errors.date} />
         </Grid2>
       </Grid2>
-      <TypeRadioGroup
-        type={type}
-        onChange={handleTypeChange}
-        error={errors.type}
-      />
+      <TypeRadioGroup type={type} onChange={handleTypeChange} />
       <AmountInput innerRef={amountInputRef} error={errors.amount} />
       <Box>
         <Button variant="contained" endIcon={<PublishIcon />} type="submit">

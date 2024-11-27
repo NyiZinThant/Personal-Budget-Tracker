@@ -1,9 +1,15 @@
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+} from '@mui/material';
 import { expenseCategories } from '../utils/dataUtils';
 
-export default function ({ category, onChange }) {
+export default function ({ category, onChange, error }) {
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth error={error !== ''}>
       <InputLabel id="category-select-label">Category</InputLabel>
       <Select
         labelId="category-select-label"
@@ -18,6 +24,7 @@ export default function ({ category, onChange }) {
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
 }

@@ -3,11 +3,12 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  FormHelperText,
 } from '@mui/material';
 
-export default function AmountInput({ innerRef }) {
+export default function AmountInput({ innerRef, error }) {
   return (
-    <FormControl fullWidth size="12">
+    <FormControl fullWidth size="12" error={error !== ''}>
       <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
       <OutlinedInput
         id="outlined-adornment-amount"
@@ -15,6 +16,7 @@ export default function AmountInput({ innerRef }) {
         label="Amount"
         inputRef={innerRef}
       />
+      <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
 }
