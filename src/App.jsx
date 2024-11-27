@@ -6,22 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import Home from './pages/Home';
 import Nav from './components/Nav';
 import { TransactionProvider } from './contexts/TransactionContext';
-
-const expenseCategories = [
-  'housing',
-  'transportation',
-  'foodAndGroceries',
-  'healthAndWellness',
-  'personalCare',
-  'entertainment',
-  'debtRepayment',
-  'childrenAndFamily',
-  'pets',
-  'travel',
-  'giftsAndDonations',
-  'education',
-  'miscellaneous',
-];
+import AddTransaction from './pages/AddTransaction';
 
 export default function App() {
   return (
@@ -30,6 +15,7 @@ export default function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/add" element={<AddTransaction />} />
         </Routes>
       </BrowserRouter>
     </TransactionProvider>

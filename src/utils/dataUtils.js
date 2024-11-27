@@ -110,3 +110,20 @@ export const getExpensesChartData = function (data, totalVal) {
   }
   return result;
 };
+
+export const expenseCategories = [
+  'Housing',
+  'Transportation',
+  'FoodAndGroceries',
+  'HealthAndWellness',
+  'PersonalCare',
+  'Entertainment',
+  'DebtRepayment',
+  'ChildrenAndFamily',
+  'Pets',
+  'Travel',
+  'GiftsAndDonations',
+  'Education',
+  'Miscellaneous',
+  'Other',
+];
