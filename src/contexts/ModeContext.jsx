@@ -1,16 +1,30 @@
-import { useColorScheme } from '@mui/material';
-import { createContext, useContext } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { createContext, useContext, useState, useMemo } from 'react';
 
 const ModeContext = createContext(null);
 const SetModeContext = createContext(null);
 
 export function ModeProvider({ children }) {
-  const { mode, setMode } = useColorScheme();
-  //   if (!mode) return null;
+  const [mode, setMode] = useState('dark');
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+          primary: {
+            main: '#eaeaea',
+          },
+          secondary: {
+            main: '#4747d6',
+          },
+        },
+      }),
+    [mode]
+  );
   return (
     <ModeContext.Provider value={mode}>
       <SetModeContext.Provider value={setMode}>
-        {children}
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </SetModeContext.Provider>
     </ModeContext.Provider>
   );

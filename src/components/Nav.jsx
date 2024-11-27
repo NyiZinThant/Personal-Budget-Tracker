@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { cloneElement, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,15 +14,38 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
-
+import { ToggleButton, useScrollTrigger } from '@mui/material';
+import { useMode, useSetMode } from '../contexts/ModeContext';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 const drawerWidth = 240;
 const navItems = [
   { label: 'Home', link: '/' },
   { label: 'Add Transaction', link: '/add' },
 ];
+function ElevationScroll(props) {
+  const { children, window } = props;
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: window ? window() : undefined,
+  });
 
-export default function Nav({ window }) {
+  return children
+    ? cloneElement(children, {
+        elevation: trigger ? 4 : 0,
+      })
+    : null;
+}
+export default function Nav(props) {
+  const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mode = useMode();
+  const setMode = useSetMode();
+  let buttonTextColor = mode === 'light' ? '#000' : '#fff';
   const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -45,6 +68,21 @@ export default function Nav({ window }) {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{
+              borderRadius: '50%',
+              textAlign: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            onClick={() =>
+              setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+            }
+          >
+            {mode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -55,37 +93,51 @@ export default function Nav({ window }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Personal Budget Tracker
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button
-                key={item.label}
-                sx={{ color: '#fff' }}
-                onClick={() => navigate(item.link)}
+      <ElevationScroll {...props}>
+        <AppBar component="nav">
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            >
+              Personal Budget Tracker
+            </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              {navItems.map((item) => (
+                <Button
+                  key={item.label}
+                  sx={{ color: buttonTextColor }}
+                  onClick={() => navigate(item.link)}
+                >
+                  {item.label}
+                </Button>
+              ))}
+              <ToggleButton
+                value="dark"
+                selected={mode === 'dark'}
+                sx={{ borderRadius: '50%' }}
+                onChange={() =>
+                  setMode((prevMode) =>
+                    prevMode === 'light' ? 'dark' : 'light'
+                  )
+                }
               >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
+                {mode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+              </ToggleButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </ElevationScroll>
       <nav>
         <Drawer
           container={container}

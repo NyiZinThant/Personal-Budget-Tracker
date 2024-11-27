@@ -26,7 +26,6 @@ export const filterData = function (data, name) {
 export const sortDataBy = function (data, col = 'id') {
   const newData = [...data];
   newData.sort((a, b) => {
-    console.log(a[col], col);
     return a[col] - b[col];
   });
   return newData;

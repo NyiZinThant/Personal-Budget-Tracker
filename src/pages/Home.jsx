@@ -22,7 +22,7 @@ export default function Home() {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
           <NumberCard
-            label={'Income'}
+            label={'Incomes'}
             number={totalIncomes}
             bgcolor={teal['A700']}
           />
