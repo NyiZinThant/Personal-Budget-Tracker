@@ -10,6 +10,10 @@ export const createData = function (
   type,
   amount
 ) {
+  if (!id || !date || !description || !category || !type || !amount) {
+    console.error('Missing data');
+    return;
+  }
   date = new Date(date);
   return { id, date, description, category, type, amount };
 };
@@ -31,6 +35,10 @@ export const sortDataBy = function (data, col = 'id') {
   return newData;
 };
 export const getMonthlyExpenses = function (data) {
+  if (!data) {
+    console.error("data can't be null");
+    return;
+  }
   const result = [
     {
       value: 0,
@@ -89,6 +97,14 @@ export const getMonthlyExpenses = function (data) {
 };
 
 export const getExpensesChartData = function (data, totalVal) {
+  if (!data || !totalVal) {
+    console.error('Missing argument');
+    return [];
+  }
+  if (totalVal <= 0) {
+    console.error('invalid total value');
+    return [];
+  }
   let result = [];
   let categories = data.reduce((prev, curr) => {
     if (curr.type === 'Income') return prev;

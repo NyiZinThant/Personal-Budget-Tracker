@@ -59,8 +59,8 @@ describe('getFinancialSummary', () => {
       {
         id: 2,
         date: '2024-12-01',
-        description: 'Salary',
-        category: 'Income',
+        description: 'weekly salary',
+        category: 'Salary',
         type: 'Income',
         amount: 1500.0,
       },
