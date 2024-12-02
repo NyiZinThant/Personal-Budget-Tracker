@@ -12,5 +12,9 @@ export const getStoredTransactions = function () {
 };
 
 export const storeTransactions = function (newTransactions) {
+  if (!newTransactions) {
+    console.error("New transactions can't be empty");
+    return;
+  }
   localStorage.setItem('transactions', JSON.stringify(newTransactions));
 };
