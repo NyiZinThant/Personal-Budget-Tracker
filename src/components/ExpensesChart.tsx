@@ -1,8 +1,13 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Box, Card, Typography } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
-const valueFormatter = (item) => `${item.value}%`;
-export default function ExpensesChart({ data }) {
+import Transaction from '../models/transaction';
+import { ExpensesChartData } from '../utils/dataUtils';
+const valueFormatter = (item: { value: number }) => `${item.value}%`;
+type ExpensesChartProp = {
+  data: ExpensesChartData[];
+};
+export default function ExpensesChart({ data }: ExpensesChartProp) {
   return (
     <Card variant="outlined" sx={{ p: 2 }}>
       <Typography component={'h5'} variant="h5" sx={{ p: 1 }}>
@@ -59,10 +64,8 @@ export default function ExpensesChart({ data }) {
                     height: '6px',
                   }}
                 />
-                <Typography
-                  variant="custom_caption_manrope"
-                  sx={{ textTransform: 'capitalize' }}
-                >
+                {/* fixed */}
+                <Typography sx={{ textTransform: 'capitalize' }}>
                   {item.label}
                 </Typography>
               </Box>

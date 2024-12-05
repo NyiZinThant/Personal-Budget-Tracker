@@ -1,6 +1,13 @@
-import { Button, Grid2, Paper, Box, Typography } from '@mui/material';
+import {
+  Button,
+  Grid2,
+  Paper,
+  Box,
+  Typography,
+  SelectChangeEvent,
+} from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
-import { useState, useRef } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import DescriptionInput from './DescriptionInput';
 import CategorySelect from './CategorySelect';
 import DateInput from './DateInput';
@@ -9,6 +16,7 @@ import AmountInput from './AmountInput';
 import { useTransactionDispatch } from '../contexts/TransactionContext';
 import { useNavigate } from 'react-router';
 import { categories } from '../utils/dataUtils';
+import { TransactionType, TransactionWithoutId } from '../models/transaction';
 export default function TransactionForm() {
   const navigate = useNavigate();
   const transactionDispatch = useTransactionDispatch();
@@ -19,25 +27,35 @@ export default function TransactionForm() {
     category: '',
     amount: '',
   });
-  const descriptionInputRef = useRef(null);
-  const dateInputRef = useRef(null);
-  const [type, setType] = useState('Income');
-  const amountInputRef = useRef(null);
-  const handleChange = (event) => {
+  const descriptionInputRef = useRef<HTMLInputElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
+  const [type, setType] = useState<TransactionType>('Income');
+  const amountInputRef = useRef<HTMLInputElement>(null);
+  const handleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value);
   };
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
+  const handleTypeChange = (e: ChangeEvent) => {
+    const newType = (e.target as HTMLInputElement).value;
+    if (newType !== 'Income' && newType !== 'Expense') return;
+    setType(newType);
   };
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     let hasError = false;
-    let data = {
+    if (
+      !descriptionInputRef.current ||
+      !dateInputRef.current ||
+      !amountInputRef.current
+    ) {
+      return;
+    }
+    const date: Date = new Date(dateInputRef.current.value);
+    let data: TransactionWithoutId = {
       description: descriptionInputRef.current.value,
-      date: dateInputRef.current.value,
+      date,
       category: category,
       type,
-      amount: amountInputRef.current.value,
+      amount: +amountInputRef.current.value,
     };
     if (data.description === '') {
       setErrors((prevErrors) => {
@@ -49,7 +67,7 @@ export default function TransactionForm() {
         return { ...prevErrors, description: '' };
       });
     }
-    if (data.date === '') {
+    if (isNaN(data.date.getTime())) {
       setErrors((prevErrors) => {
         return { ...prevErrors, date: 'Date is empty.' };
       });
@@ -70,7 +88,7 @@ export default function TransactionForm() {
         return { ...prevErrors, category: '' };
       });
     }
-    if (data.amount === '') {
+    if (!data.amount) {
       setErrors((prevErrors) => {
         return { ...prevErrors, amount: 'Amount is empty.' };
       });
@@ -82,7 +100,7 @@ export default function TransactionForm() {
     }
     if (hasError) return;
     navigate('/');
-    transactionDispatch({ type: 'added', data });
+    transactionDispatch && transactionDispatch({ type: 'added', data });
   };
   return (
     <Paper
@@ -107,7 +125,7 @@ export default function TransactionForm() {
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 6 }}>
           <CategorySelect
-            categories={categories[type.toLowerCase()]}
+            categories={categories[type === 'Income' ? 'income' : 'expense']}
             category={category}
             onChange={handleChange}
             error={errors.category}

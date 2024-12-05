@@ -1,6 +1,13 @@
 import { TextField } from '@mui/material';
-
-export default function DescriptionInput({ innerRef, error }) {
+import { Ref } from 'react';
+type DescriptionInputProp = {
+  innerRef: Ref<HTMLInputElement>;
+  error: string;
+};
+export default function DescriptionInput({
+  innerRef,
+  error,
+}: DescriptionInputProp) {
   return (
     <TextField
       error={error !== ''}
@@ -9,7 +16,8 @@ export default function DescriptionInput({ innerRef, error }) {
       id="description-input"
       label="Description"
       variant="outlined"
-      size="12"
+      // fixed
+      size="medium"
     />
   );
 }

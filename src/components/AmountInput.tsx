@@ -5,10 +5,15 @@ import {
   InputAdornment,
   FormHelperText,
 } from '@mui/material';
+import { Ref } from 'react';
 
-export default function AmountInput({ innerRef, error }) {
+type AmountInputProp = {
+  innerRef: Ref<HTMLInputElement>;
+  error: string;
+};
+export default function AmountInput({ innerRef, error }: AmountInputProp) {
   return (
-    <FormControl fullWidth size="12" error={error !== ''}>
+    <FormControl fullWidth size="medium" error={error !== ''}>
       <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
       <OutlinedInput
         id="outlined-adornment-amount"

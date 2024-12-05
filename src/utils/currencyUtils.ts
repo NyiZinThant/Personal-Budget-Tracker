@@ -1,4 +1,13 @@
-export const getFinancialSummary = function (data) {
+import Transaction from '../models/transaction';
+
+type FinancialSummary = {
+  totalSaving: number;
+  totalExpenses: number;
+  totalIncomes: number;
+};
+export const getFinancialSummary = function (
+  data: Transaction[]
+): FinancialSummary {
   if (!data) {
     console.error("data can't be null");
     return { totalSaving: 0, totalExpenses: 0, totalIncomes: 0 };
@@ -17,7 +26,7 @@ export const getFinancialSummary = function (data) {
   return { totalSaving, totalExpenses, totalIncomes };
 };
 
-export const calcPercentage = function (val, total) {
+export const calcPercentage = function (val: number, total: number): number {
   if (!val) {
     console.error("value can't be null");
     return -1;

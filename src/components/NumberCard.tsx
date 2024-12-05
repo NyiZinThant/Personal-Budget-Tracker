@@ -1,7 +1,12 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Color, Typography } from '@mui/material';
 import { teal } from '@mui/material/colors';
 
-export default function NumberCard({ label, number, bgcolor }) {
+type NumberCardProp = {
+  label: string;
+  number: number;
+  bgcolor?: string;
+};
+export default function NumberCard({ label, number, bgcolor }: NumberCardProp) {
   return (
     <Card variant="outlined">
       <CardContent sx={{ bgcolor }}>

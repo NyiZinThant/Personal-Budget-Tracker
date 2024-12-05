@@ -1,4 +1,4 @@
-import { cloneElement, useState } from 'react';
+import { cloneElement, ReactNode, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -23,8 +23,11 @@ const navItems = [
   { label: 'Home', link: '/' },
   { label: 'Add Transaction', link: '/add' },
 ];
-function ElevationScroll(props) {
-  const { children, window } = props;
+type Props = {
+  window?: () => Window;
+  children?: React.ReactElement<{ elevation?: number }>;
+};
+function ElevationScroll({ children, window }: Props) {
   // Note that you normally won't need to set the window ref as useScrollTrigger
   // will default to window.
   // This is only being set here because the demo is in an iframe.
@@ -40,7 +43,7 @@ function ElevationScroll(props) {
       })
     : null;
 }
-export default function Nav(props) {
+export default function Nav(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const mode = useMode();
@@ -76,9 +79,10 @@ export default function Nav(props) {
               display: 'flex',
               justifyContent: 'center',
             }}
-            onClick={() =>
-              setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
-            }
+            onClick={() => {
+              if (!setMode) return;
+              setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+            }}
           >
             {mode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
           </ListItemButton>
@@ -126,11 +130,12 @@ export default function Nav(props) {
                 value="dark"
                 selected={mode === 'dark'}
                 sx={{ borderRadius: '50%' }}
-                onChange={() =>
+                onChange={() => {
+                  if (!setMode) return;
                   setMode((prevMode) =>
                     prevMode === 'light' ? 'dark' : 'light'
-                  )
-                }
+                  );
+                }}
               >
                 {mode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
               </ToggleButton>

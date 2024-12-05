@@ -8,8 +8,12 @@ import {
   Paper,
 } from '@mui/material';
 import stc from 'string-to-color';
-
-export default function Table({ columnNames, data }) {
+import Transaction from '../models/transaction';
+type TableProp = {
+  columnNames: string[];
+  data: Transaction[];
+};
+export default function Table({ columnNames, data }: TableProp) {
   return (
     <TableContainer component={Paper} sx={{ marginTop: 2 }}>
       <MuiTable sx={{ minWidth: 650 }} aria-label="simple table">
@@ -31,9 +35,11 @@ export default function Table({ columnNames, data }) {
                   component={'th'}
                   scope="row"
                   key={key}
-                  sx={{ bgcolor: key === 'category' && stc(value) }}
+                  sx={{ bgcolor: key === 'category' ? stc(value) : undefined }}
                 >
-                  {key === 'date' ? value.toLocaleDateString('en-CA') : value}
+                  {value instanceof Date
+                    ? value.toLocaleDateString('en-CA')
+                    : value}
                 </TableCell>
               ))}
             </TableRow>

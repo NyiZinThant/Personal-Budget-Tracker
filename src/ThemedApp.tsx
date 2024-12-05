@@ -1,7 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 import { ModeProvider } from './contexts/ModeContext';
-import { useMemo } from 'react';
 const theme = createTheme({
   palette: {
     mode: 'dark',

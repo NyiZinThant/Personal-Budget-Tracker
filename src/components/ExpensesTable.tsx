@@ -7,15 +7,19 @@ import Table from './Table';
 import { filterData, getColumns, sortDataBy } from '../utils/dataUtils';
 import { useTransaction } from '../contexts/TransactionContext';
 
+type Alignment = 'All' | 'Income' | 'Expense';
 export default function ExpensesTable() {
-  const [alignment, setAlignment] = useState('All');
-  const [selected, setSelected] = useState(null);
+  const [alignment, setAlignment] = useState<Alignment>('All');
+  const [selected, setSelected] = useState(false);
   const data = useTransaction();
   const modifedDataRef = useRef(filterData(data, 'All'));
   modifedDataRef.current = !selected
     ? sortDataBy(modifedDataRef.current)
     : sortDataBy(modifedDataRef.current, 'date');
-  const handleChange = (event, newAlignment) => {
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: Alignment
+  ) => {
     setAlignment(newAlignment);
     modifedDataRef.current = filterData(data, newAlignment);
   };

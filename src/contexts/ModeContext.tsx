@@ -1,11 +1,24 @@
-import { createTheme, ThemeProvider } from '@mui/material';
-import { createContext, useContext, useState, useMemo } from 'react';
+import { createTheme, PaletteMode, ThemeProvider } from '@mui/material';
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  ReactNode,
+  SetStateAction,
+  Dispatch,
+} from 'react';
 
-const ModeContext = createContext(null);
-const SetModeContext = createContext(null);
+const ModeContext = createContext<PaletteMode | null>(null);
+const SetModeContext = createContext<Dispatch<
+  SetStateAction<PaletteMode>
+> | null>(null);
 
-export function ModeProvider({ children }) {
-  const [mode, setMode] = useState('dark');
+type ModeProviderType = {
+  children: ReactNode;
+};
+export function ModeProvider({ children }: ModeProviderType) {
+  const [mode, setMode] = useState<PaletteMode>('dark');
   const theme = useMemo(
     () =>
       createTheme({

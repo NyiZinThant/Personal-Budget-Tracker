@@ -5,8 +5,12 @@ import {
   FormControlLabel,
   Radio,
 } from '@mui/material';
-
-export default function TypeRadioGroup({ type, onChange }) {
+import { TransactionType } from '../models/transaction';
+type TypeRadioGroupProp = {
+  type: TransactionType;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+export default function TypeRadioGroup({ type, onChange }: TypeRadioGroupProp) {
   return (
     <FormControl>
       <FormLabel id="type-radio-buttons-group-label">Type</FormLabel>

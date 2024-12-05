@@ -4,9 +4,22 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  SelectChangeEvent,
 } from '@mui/material';
+import { CategoryType } from '../models/transaction';
 
-export default function ({ categories, category, onChange, error }) {
+type CategorySelectType = {
+  categories: CategoryType[];
+  category: CategoryType;
+  onChange: (event: SelectChangeEvent) => void;
+  error: string;
+};
+export default function CategorySelect({
+  categories,
+  category,
+  onChange,
+  error,
+}: CategorySelectType) {
   return (
     <FormControl fullWidth error={error !== ''}>
       <InputLabel id="category-select-label">Category</InputLabel>

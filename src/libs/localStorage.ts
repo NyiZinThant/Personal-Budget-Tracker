@@ -1,7 +1,9 @@
-export const getStoredTransactions = function () {
-  const storedTransactions = localStorage.getItem('transactions');
+import Transaction from '../models/transaction';
+
+export const getStoredTransactions = function (): Transaction[] {
+  const storedTransactions = localStorage.getItem('transactions') || '';
   try {
-    let transactions = JSON.parse(storedTransactions) || [];
+    let transactions: Transaction[] = JSON.parse(storedTransactions) || [];
     return transactions.map((transaction) => {
       return { ...transaction, date: new Date(transaction.date) };
     });
@@ -11,7 +13,7 @@ export const getStoredTransactions = function () {
   }
 };
 
-export const storeTransactions = function (newTransactions) {
+export const storeTransactions = function (newTransactions: Transaction[]) {
   if (!newTransactions) {
     console.error("New transactions can't be empty");
     return;
