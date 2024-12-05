@@ -3,6 +3,7 @@ import {
   getStoredTransactions,
   storeTransactions,
 } from '../../src/libs/localStorage';
+import Transaction from '../../src/models/transaction';
 describe('getStoredTransactions', () => {
   afterEach(() => {
     localStorage.clear();
@@ -33,21 +34,23 @@ describe('storeTransactions', () => {
   });
   it('should return undefined with console.error if new transactions are empty', () => {
     const errorSpy = vi.spyOn(console, 'error');
+    // @ts-expect-error expected 1 arguments
     expect(storeTransactions()).toBe(undefined);
     expect(errorSpy).toHaveBeenCalled();
   });
   it('should store new transactions in localStorage', () => {
     const date = new Date();
-    const transactions = [
+    const transactions: Transaction[] = [
       {
-        id: 1,
+        id: '1',
         date,
         description: 'testing transaction',
-        category: 'salary',
-        type: 'income',
+        category: 'Salary/Wages',
+        type: 'Income',
         amount: 100,
       },
     ];
+
     storeTransactions(transactions);
     expect(getStoredTransactions()).toEqual(transactions);
   });

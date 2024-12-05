@@ -5,21 +5,23 @@ import {
   getMonthlyExpenses,
 } from '../../src/utils/dataUtils';
 import stc from 'string-to-color';
+import Transaction from '../../src/models/transaction';
 vi.mock('uuid', () => ({
   v4: vi.fn(() => 'mocked-uuid'),
 }));
 vi.mock('string-to-color');
 describe('createData', () => {
-  it('should log error if one of the data is missing', () => {
-    const spyError = vi.spyOn(console, 'error');
-    createData(1, '2024-11-11', 'testing 1', 'Salary', 'Income');
-    expect(spyError).toBeCalled();
+  it('should throw new error if one of the data is missing', () => {
+    expect(
+      // @ts-expect-error expected 6 arguments
+      () => createData('1', '2024-11-11', 'testing 1', 'Salary', 'Income')
+    ).toThrow(/invalid/i);
   });
   it('should return transaction object', () => {
     expect(
-      createData(1, '2024-11-11', 'testing 1', 'Salary', 'Income', 1500)
+      createData('1', '2024-11-11', 'testing 1', 'Salary', 'Income', 1500)
     ).toEqual({
-      id: 1,
+      id: '1',
       date: new Date('2024-11-11'),
       description: 'testing 1',
       category: 'Salary',
@@ -31,13 +33,14 @@ describe('createData', () => {
 describe('getMonthlyExpenses', () => {
   it('should log error if data is null', () => {
     const spyError = vi.spyOn(console, 'error');
+    // @ts-expect-error expected 1 arguments
     getMonthlyExpenses();
     expect(spyError).toHaveBeenCalled();
   });
   it('should return monthly expense', () => {
-    const data = [
+    const data: Transaction[] = [
       {
-        id: 1,
+        id: '1',
         date: new Date('2024-01-15'),
         description: 'Rent payment',
         category: 'Housing',
@@ -45,7 +48,7 @@ describe('getMonthlyExpenses', () => {
         amount: 1200.0,
       },
       {
-        id: 2,
+        id: '2',
         date: new Date('2024-02-10'),
         description: 'Car maintenance',
         category: 'Transport',
@@ -53,7 +56,7 @@ describe('getMonthlyExpenses', () => {
         amount: 300.5,
       },
       {
-        id: 3,
+        id: '3',
         date: new Date('2024-02-20'),
         description: 'Internet bill',
         category: 'Utilities',
@@ -61,7 +64,7 @@ describe('getMonthlyExpenses', () => {
         amount: 60.0,
       },
       {
-        id: 4,
+        id: '4',
         date: new Date('2024-08-05'),
         description: 'Grocery shopping',
         category: 'Food',
@@ -69,7 +72,7 @@ describe('getMonthlyExpenses', () => {
         amount: 250.75,
       },
       {
-        id: 5,
+        id: '5',
         date: new Date('2024-10-25'),
         description: 'Gym membership',
         category: 'Health',
@@ -132,9 +135,9 @@ describe('getMonthlyExpenses', () => {
 
 describe('getExpensesChartData', () => {
   vi.mocked(stc).mockImplementation((str) => 'mocked-color-' + str);
-  const data = [
+  const data: Transaction[] = [
     {
-      id: 1,
+      id: '1',
       date: new Date('2024-01-15'),
       description: 'Rent payment',
       category: 'Housing',
@@ -142,7 +145,7 @@ describe('getExpensesChartData', () => {
       amount: 1200.0,
     },
     {
-      id: 2,
+      id: '2',
       date: new Date('2024-02-10'),
       description: 'Car maintenance',
       category: 'Transport',
@@ -150,7 +153,7 @@ describe('getExpensesChartData', () => {
       amount: 300.5,
     },
     {
-      id: 3,
+      id: '3',
       date: new Date('2024-02-20'),
       description: 'Internet bill',
       category: 'Utilities',
@@ -158,7 +161,7 @@ describe('getExpensesChartData', () => {
       amount: 60.0,
     },
     {
-      id: 4,
+      id: '4',
       date: new Date('2024-08-05'),
       description: 'Grocery shopping',
       category: 'Food',
@@ -166,7 +169,7 @@ describe('getExpensesChartData', () => {
       amount: 250.75,
     },
     {
-      id: 5,
+      id: '5',
       date: new Date('2024-10-25'),
       description: 'Gym membership',
       category: 'Health',
@@ -214,9 +217,11 @@ describe('getExpensesChartData', () => {
   });
   it('should return empty array and log error if data or totalValue is null', () => {
     const spyError = vi.spyOn(console, 'error');
+    // @ts-expect-error expected Transaction[]
     expect(getExpensesChartData(null, 120)).toEqual([]);
     expect(spyError).toHaveBeenCalled();
     spyError.mockClear();
+    // @ts-expect-error expected 2 arguments
     expect(getExpensesChartData(data)).toEqual([]);
     expect(spyError).toHaveBeenCalled();
   });
