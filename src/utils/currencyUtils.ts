@@ -12,10 +12,13 @@ export const getFinancialSummary = function (
     console.error("data can't be null");
     return { totalSaving: 0, totalExpenses: 0, totalIncomes: 0 };
   }
-  let totalExpenses = 0;
-  let totalIncomes = 0;
+  let totalExpenses: number = 0;
+  let totalIncomes: number = 0;
   data.forEach((el) => {
     if (!el.type) return;
+    if (typeof el.amount === 'string') {
+      el.amount = parseInt(el.amount);
+    }
     if (el.type === 'Income') {
       totalIncomes += el.amount;
     } else {

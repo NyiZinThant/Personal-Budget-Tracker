@@ -13,13 +13,13 @@ import CategorySelect from './CategorySelect';
 import DateInput from './DateInput';
 import TypeRadioGroup from './TypeRadioGroup';
 import AmountInput from './AmountInput';
-import { useTransactionDispatch } from '../contexts/TransactionContext';
+import { useAddTransactionMutation } from '../contexts/TransactionContext';
 import { useNavigate } from 'react-router';
 import { categories } from '../utils/dataUtils';
 import { TransactionType, TransactionWithoutId } from '../models/transaction';
 export default function TransactionForm() {
   const navigate = useNavigate();
-  const transactionDispatch = useTransactionDispatch();
+  const addTransactionMutation = useAddTransactionMutation();
   const [category, setCategory] = useState('');
   const [errors, setErrors] = useState({
     description: '',
@@ -100,7 +100,8 @@ export default function TransactionForm() {
     }
     if (hasError) return;
     navigate('/');
-    transactionDispatch && transactionDispatch({ type: 'added', data });
+
+    addTransactionMutation && addTransactionMutation(data);
   };
   return (
     <Paper

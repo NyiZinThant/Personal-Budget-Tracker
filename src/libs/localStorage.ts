@@ -1,5 +1,5 @@
-import Transaction from '../models/transaction';
-
+import Transaction, { TransactionWithoutId } from '../models/transaction';
+import { v4 as uuidv4 } from 'uuid';
 export const getStoredTransactions = function (): Transaction[] {
   const storedTransactions = localStorage.getItem('transactions') || '';
   try {
@@ -19,4 +19,25 @@ export const storeTransactions = function (newTransactions: Transaction[]) {
     return;
   }
   localStorage.setItem('transactions', JSON.stringify(newTransactions));
+};
+
+export const getTransaction = async function (): Promise<Transaction[]> {
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  return getStoredTransactions();
+};
+
+export const addTransaction = async function (
+  data: TransactionWithoutId
+): Promise<Transaction[]> {
+  const id = uuidv4();
+  const transactions = await getTransaction();
+  const newTransactions = [
+    ...transactions,
+    {
+      id,
+      ...data,
+    },
+  ];
+  storeTransactions(newTransactions);
+  return newTransactions;
 };

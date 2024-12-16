@@ -6,23 +6,39 @@ import {
   useReducer,
 } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { getStoredTransactions, storeTransactions } from '../libs/localStorage';
+import {
+  addTransaction,
+  getStoredTransactions,
+  getTransaction,
+  storeTransactions,
+} from '../libs/localStorage';
 import Transaction, { TransactionWithoutId } from '../models/transaction';
-const TransactionContext = createContext<Transaction[]>([]);
-const TransactionDispatchContext = createContext<Dispatch<Action> | null>(null);
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+export const TransactionContext = createContext<Transaction[]>([]);
+const AddTransactionMutationContext = createContext<
+  ((data: TransactionWithoutId) => Promise<Transaction[]>) | null
+>(null);
 type TransactionProvider = {
   children: ReactNode;
 };
 export function TransactionProvider({ children }: TransactionProvider) {
-  const [transaction, dispatch] = useReducer(
-    transactionReducer,
-    getStoredTransactions()
-  );
+  const queryClient = useQueryClient();
+  const { data: transaction } = useQuery<Transaction[]>({
+    queryFn: getTransaction,
+    queryKey: ['transaction'],
+  });
+  const { mutateAsync: AddTransactionMutation } = useMutation({
+    mutationFn: addTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transaction'] });
+    },
+  });
+
   return (
-    <TransactionContext.Provider value={transaction}>
-      <TransactionDispatchContext.Provider value={dispatch}>
+    <TransactionContext.Provider value={transaction ?? []}>
+      <AddTransactionMutationContext.Provider value={AddTransactionMutation}>
         {children}
-      </TransactionDispatchContext.Provider>
+      </AddTransactionMutationContext.Provider>
     </TransactionContext.Provider>
   );
 }
@@ -30,33 +46,10 @@ export function TransactionProvider({ children }: TransactionProvider) {
 export function useTransaction() {
   return useContext(TransactionContext);
 }
-
-export function useTransactionDispatch() {
-  return useContext(TransactionDispatchContext);
+export function useAddTransactionMutation() {
+  return useContext(AddTransactionMutationContext);
 }
-type Action = {
-  type: 'added';
-  data: TransactionWithoutId;
-};
-const transactionReducer = function (
-  transactions: Transaction[],
-  action: Action
-) {
-  switch (action.type) {
-    case 'added': {
-      const id = uuidv4();
-      const newTransactions = [
-        ...transactions,
-        {
-          id,
-          ...action.data,
-        },
-      ];
-      storeTransactions(newTransactions);
-      return newTransactions;
-    }
-  }
-};
+
 // const initialData = [
 //   createData(1, '2024-11-01', 'Grocery shopping', 'Food', 'Expense', 50.75),
 //   createData(2, '2024-11-02', 'Monthly salary', 'Salary', 'Income', 2000),
