@@ -161,11 +161,14 @@ export const getExpensesChartData = function (
   totalVal: number
 ): ExpensesChartData[] {
   let result: ExpensesChartData[] = [];
-  if (!data || !totalVal) {
+  if (
+    (data === undefined || data === null) &&
+    (totalVal === undefined || totalVal === null)
+  ) {
     console.error('Missing argument');
     return result;
   }
-  if (totalVal <= 0) {
+  if (totalVal < 0) {
     console.error('invalid total value');
     return result;
   }
