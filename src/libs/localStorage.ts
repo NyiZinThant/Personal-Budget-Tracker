@@ -21,7 +21,7 @@ export const storeTransactions = function (newTransactions: Transaction[]) {
   localStorage.setItem('transactions', JSON.stringify(newTransactions));
 };
 
-export const getTransaction = async function (): Promise<Transaction[]> {
+export const getTransactions = async function (): Promise<Transaction[]> {
   await new Promise((resolve) => setTimeout(resolve, 0));
   return getStoredTransactions();
 };
@@ -30,7 +30,7 @@ export const addTransaction = async function (
   data: TransactionWithoutId
 ): Promise<Transaction[]> {
   const id = uuidv4();
-  const transactions = await getTransaction();
+  const transactions = await getTransactions();
   const newTransactions = [
     ...transactions,
     {

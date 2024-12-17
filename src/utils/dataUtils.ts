@@ -93,7 +93,7 @@ export const createData = function (
 
 // columns for transaction table
 export const getColumns = function () {
-  return ['Id', 'Date', 'Description', 'Category', 'Type', 'Amount'];
+  return ['Id', 'Description', 'Amount', 'Type', 'Category', 'Date'];
 };
 
 // filtering transactions by types
@@ -144,7 +144,7 @@ export const getMonthlyExpenses = function (
   }
   for (const item of data) {
     if (item.type === 'Income') continue;
-    result[item.date.getMonth()].value += item.amount;
+    result[new Date(item.date).getMonth()].value += item.amount;
   }
   return result;
 };

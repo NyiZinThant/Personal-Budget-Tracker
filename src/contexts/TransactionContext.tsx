@@ -1,19 +1,8 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  useContext,
-  useReducer,
-} from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import {
-  addTransaction,
-  getStoredTransactions,
-  getTransaction,
-  storeTransactions,
-} from '../libs/localStorage';
+import { createContext, ReactNode, useContext } from 'react';
+import { addTransaction } from '../libs/localStorage';
 import Transaction, { TransactionWithoutId } from '../models/transaction';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { getTransactions } from '../api/transactionApi';
 export const TransactionContext = createContext<Transaction[]>([]);
 const AddTransactionMutationContext = createContext<
   ((data: TransactionWithoutId) => Promise<Transaction[]>) | null
@@ -24,7 +13,7 @@ type TransactionProvider = {
 export function TransactionProvider({ children }: TransactionProvider) {
   const queryClient = useQueryClient();
   const { data: transaction } = useQuery<Transaction[]>({
-    queryFn: getTransaction,
+    queryFn: getTransactions,
     queryKey: ['transaction'],
   });
   const { mutateAsync: AddTransactionMutation } = useMutation({
