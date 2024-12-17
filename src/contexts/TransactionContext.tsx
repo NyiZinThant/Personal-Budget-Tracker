@@ -1,8 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
-import { addTransaction } from '../libs/localStorage';
 import Transaction, { TransactionWithoutId } from '../models/transaction';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getTransactions } from '../api/transactionApi';
+import { addTransaction, getTransactions } from '../api/transactionApi';
 export const TransactionContext = createContext<Transaction[]>([]);
 const AddTransactionMutationContext = createContext<
   ((data: TransactionWithoutId) => Promise<Transaction[]>) | null

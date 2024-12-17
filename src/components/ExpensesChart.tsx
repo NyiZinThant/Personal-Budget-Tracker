@@ -8,8 +8,6 @@ type ExpensesChartProp = {
   data: ExpensesChartData[];
 };
 export default function ExpensesChart({ data }: ExpensesChartProp) {
-  console.log(data);
-
   return (
     <Card variant="outlined" sx={{ p: 2 }}>
       <Typography component={'h5'} variant="h5" sx={{ p: 1 }}>

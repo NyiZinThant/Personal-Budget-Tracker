@@ -1,5 +1,8 @@
 import axios from 'axios';
-import Transaction from '../models/transaction';
+import Transaction, {
+  TransactionType,
+  TransactionWithoutId,
+} from '../models/transaction';
 
 const url = import.meta.env.VITE_API_URL;
 export const getTransactions = async (): Promise<Transaction[]> => {
@@ -11,6 +14,25 @@ export const getTransactions = async (): Promise<Transaction[]> => {
       return { ...transaction, date: new Date(transaction.date) };
     });
     return transactions;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(error.code, error.message);
+    } else {
+      console.error(error);
+    }
+    return [];
+  }
+};
+
+export const addTransaction = async function (
+  newTransaction: TransactionWithoutId
+): Promise<Transaction[]> {
+  try {
+    await axios.post(`${url}/api/v1/transactions`, {
+      ...newTransaction,
+      date: newTransaction.date.toISOString().split('T')[0],
+    });
+    return await getTransactions();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(error.code, error.message);

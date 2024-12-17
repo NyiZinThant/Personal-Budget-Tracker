@@ -107,7 +107,6 @@ export default function TransactionForm() {
     }
     if (hasError) return;
     navigate('/');
-
     addTransactionMutation && addTransactionMutation(data);
   };
   return (
