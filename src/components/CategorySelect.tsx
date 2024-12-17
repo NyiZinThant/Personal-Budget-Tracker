@@ -6,11 +6,11 @@ import {
   FormHelperText,
   SelectChangeEvent,
 } from '@mui/material';
-import { CategoryType } from '../models/transaction';
+import { Category } from '../models/category';
 
 type CategorySelectType = {
-  categories: CategoryType[];
-  category: CategoryType;
+  categories: Category[];
+  category: string;
   onChange: (event: SelectChangeEvent) => void;
   error: string;
 };
@@ -31,8 +31,8 @@ export default function CategorySelect({
         onChange={onChange}
       >
         {categories.map((cate) => (
-          <MenuItem value={cate} key={cate}>
-            {cate}
+          <MenuItem value={cate.id} key={cate.id}>
+            {cate.name}
           </MenuItem>
         ))}
       </Select>

@@ -15,9 +15,16 @@ import TypeRadioGroup from './TypeRadioGroup';
 import AmountInput from './AmountInput';
 import { useAddTransactionMutation } from '../contexts/TransactionContext';
 import { useNavigate } from 'react-router';
-import { categories } from '../utils/dataUtils';
+// import { categories } from '../utils/dataUtils';
 import { TransactionType, TransactionWithoutId } from '../models/transaction';
+import { useQuery } from 'react-query';
+import { getCategories } from '../api/categoryApi';
+import { Category } from '../models/category';
 export default function TransactionForm() {
+  const { data: categories } = useQuery<Category[]>({
+    queryFn: getCategories,
+    queryKey: ['todos'],
+  });
   const navigate = useNavigate();
   const addTransactionMutation = useAddTransactionMutation();
   const [category, setCategory] = useState('');
@@ -126,7 +133,9 @@ export default function TransactionForm() {
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 6 }}>
           <CategorySelect
-            categories={categories[type === 'Income' ? 'income' : 'expense']}
+            categories={
+              categories?.filter((category) => category.type === type) || []
+            }
             category={category}
             onChange={handleChange}
             error={errors.category}
