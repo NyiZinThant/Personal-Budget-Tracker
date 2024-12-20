@@ -4,20 +4,19 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  SelectChangeEvent,
 } from '@mui/material';
 import { Category } from '../models/category';
 
 type CategorySelectType = {
   categories: Category[];
-  category: string;
-  onChange: (event: SelectChangeEvent) => void;
+  value: string;
+  setFieldValue: Function;
   error: string;
 };
 export default function CategorySelect({
   categories,
-  category,
-  onChange,
+  value,
+  setFieldValue,
   error,
 }: CategorySelectType) {
   return (
@@ -26,9 +25,9 @@ export default function CategorySelect({
       <Select
         labelId="category-select-label"
         id="category-select"
-        value={category}
+        value={value}
         label="Categroy"
-        onChange={onChange}
+        onChange={(e) => setFieldValue('category', e.target.value, false)}
       >
         {categories.map((cate) => (
           <MenuItem value={cate.id} key={cate.id}>

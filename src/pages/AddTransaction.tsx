@@ -5,7 +5,12 @@ export default function AddTransaction() {
   return (
     <Container
       maxWidth="lg"
-      sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
+      sx={{
+        mt: 2,
+        display: 'flex',
+        justifyContent: 'center',
+        minHeight: '100vh',
+      }}
     >
       <TransactionForm />
     </Container>
