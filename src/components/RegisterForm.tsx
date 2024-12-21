@@ -1,4 +1,5 @@
-import { Box, Button, Grid2, Paper, Typography } from '@mui/material';
+import { Link, Box, Button, Paper, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router';
 import Input from './ui/Input';
 import DateInput from './DateInput';
 import LoginIcon from '@mui/icons-material/Login';
@@ -24,6 +25,7 @@ type Errors = {
 };
 type GenderType = 'Male' | 'Female' | 'Other';
 export default function RegisterForm() {
+  const usedEmail: string[] = [];
   const formValidator = (values: Values) => {
     const errors: Errors = {};
     if (!values.fullName) {
@@ -31,6 +33,9 @@ export default function RegisterForm() {
     }
     if (!values.email) {
       errors.email = 'Required';
+    }
+    if (usedEmail.includes(values.email)) {
+      errors.email = 'Email is already used';
     }
     if (!values.gender) {
       errors.gender = 'Required';
@@ -154,6 +159,23 @@ export default function RegisterForm() {
             >
               Register
             </Button>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '0.5rem',
+            }}
+          >
+            <Typography component={'p'}>Don't have an account?</Typography>
+            <Link
+              component={RouterLink}
+              to="/login"
+              sx={{
+                color: 'blue',
+              }}
+            >
+              Sign In
+            </Link>
           </Box>
         </Paper>
       )}
