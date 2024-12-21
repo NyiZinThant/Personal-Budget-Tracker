@@ -1,9 +1,9 @@
 import { Button, Grid2, Paper, Box, Typography } from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import CategorySelect from './CategorySelect';
 import DateInput from './DateInput';
-import TypeRadioGroup from './TypeRadioGroup';
+import TypeRadioGroup from './RadioGroupInput';
 import AmountInput from './AmountInput';
 import { useAddTransactionMutation } from '../contexts/TransactionContext';
 import { useNavigate } from 'react-router';
@@ -54,12 +54,6 @@ export default function TransactionForm() {
   };
   const navigate = useNavigate();
   const addTransactionMutation = useAddTransactionMutation();
-  const [type, setType] = useState<TransactionType>('Income');
-  const handleTypeChange = (e: ChangeEvent) => {
-    const newType = (e.target as HTMLInputElement).value;
-    if (newType !== 'Income' && newType !== 'Expense') return;
-    setType(newType);
-  };
   return (
     <Formik
       initialValues={{
@@ -81,7 +75,6 @@ export default function TransactionForm() {
         values,
         errors,
         handleChange,
-        handleBlur,
         handleSubmit,
         setFieldValue,
         isSubmitting,
@@ -94,7 +87,7 @@ export default function TransactionForm() {
             gap: 2,
             padding: { xs: 1, md: 3 },
             width: { xs: '100%', md: 600 },
-            maxHeight: 'fit-content',
+            height: 'fit-content',
           }}
           onSubmit={handleSubmit}
         >
@@ -106,14 +99,23 @@ export default function TransactionForm() {
             value={values.description}
             error={errors.description || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
           />
-          <TypeRadioGroup type={type} onChange={handleTypeChange} />
+          <TypeRadioGroup<TransactionType>
+            label="Type"
+            value={values.type}
+            onChange={(e: ChangeEvent) => {
+              const newType = (e.target as HTMLInputElement).value;
+              setFieldValue('type', newType, false);
+            }}
+            values={['Income', 'Expense']}
+          />
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 12, md: 6 }}>
               <CategorySelect
                 categories={
-                  categories?.filter((category) => category.type === type) || []
+                  categories?.filter(
+                    (category) => category.type === values.type
+                  ) || []
                 }
                 value={values.category}
                 setFieldValue={setFieldValue}
@@ -122,6 +124,7 @@ export default function TransactionForm() {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
               <DateInput
+                label="date"
                 value={values.date}
                 setFieldValue={setFieldValue}
                 error={errors.date || ''}
@@ -132,7 +135,6 @@ export default function TransactionForm() {
             value={values.amount}
             error={errors.amount || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
           />
           <Box>
             <Button

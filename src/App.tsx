@@ -8,6 +8,7 @@ import Nav from './components/Nav';
 import { TransactionProvider } from './contexts/TransactionContext';
 import AddTransaction from './pages/AddTransaction';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import RegisterPage from './pages/RegisterPage';
 
 const queryClient = new QueryClient();
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/add" element={<AddTransaction />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </BrowserRouter>
       </TransactionProvider>
