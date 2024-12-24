@@ -1,5 +1,5 @@
-import { Link, Box, Button, Paper, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router';
+import { Link, Box, Button, Paper, Typography, Alert } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router';
 import Input from './ui/Input';
 import DateInput from './DateInput';
 import LoginIcon from '@mui/icons-material/Login';
@@ -7,6 +7,8 @@ import { Formik } from 'formik';
 import { Dayjs } from 'dayjs';
 import RadioGroupInput from './RadioGroupInput';
 import { ChangeEvent } from 'react';
+import { useRegister } from '../contexts/AuthContext';
+import { storeToken } from '../libs/localStorage';
 type Values = {
   fullName: string;
   gender: GenderType;
@@ -25,7 +27,10 @@ type Errors = {
 };
 type GenderType = 'Male' | 'Female' | 'Other';
 export default function RegisterForm() {
+  const navigate = useNavigate();
+  const register = useRegister();
   const usedEmail: string[] = [];
+
   const formValidator = (values: Values) => {
     const errors: Errors = {};
     if (!values.fullName) {
@@ -68,7 +73,19 @@ export default function RegisterForm() {
       }}
       validate={formValidator}
       onSubmit={(values: Values, { setSubmitting }) => {
+        if (values.dob === null) {
+          return;
+        }
+        register?.registerUserMutate({ ...values, dob: values.dob });
+        if (register?.isError) {
+          return;
+        }
         setSubmitting(false);
+        navigate('/login', {
+          state: {
+            message: 'Your account has been successfully created!',
+          },
+        });
       }}
     >
       {({ values, errors, handleSubmit, isSubmitting, setFieldValue }) => (
@@ -87,6 +104,9 @@ export default function RegisterForm() {
           <Typography component={'h5'} variant="h5" sx={{ p: 1 }}>
             Register New Account
           </Typography>
+          {register?.isError && (
+            <Alert severity="error">{register?.error.message}</Alert>
+          )}
           <Input
             label="Full Name"
             value={values.fullName}
@@ -116,7 +136,7 @@ export default function RegisterForm() {
               <DateInput
                 label="Date of Birth"
                 value={values.dob}
-                setFieldValue={setFieldValue}
+                onChange={(value) => setFieldValue('dob', value, false)}
                 error={errors.dob || ''}
               />
             </Box>
@@ -155,7 +175,7 @@ export default function RegisterForm() {
               variant="contained"
               endIcon={<LoginIcon />}
               type="submit"
-              disabled={isSubmitting}
+              // disabled={isSubmitting}
             >
               Register
             </Button>

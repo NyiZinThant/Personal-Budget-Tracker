@@ -66,6 +66,8 @@ export default function TransactionForm() {
       validate={formValidator}
       onSubmit={(values: Values, { setSubmitting }) => {
         const date = values.date?.toDate() || new Date();
+        console.log(addTransactionMutation);
+
         addTransactionMutation && addTransactionMutation({ ...values, date });
         setSubmitting(false);
         navigate('/');
@@ -98,7 +100,10 @@ export default function TransactionForm() {
             label="Description"
             value={values.description}
             error={errors.description || ''}
-            onChange={handleChange}
+            onChange={(e: ChangeEvent) => {
+              const newDesc = (e.target as HTMLInputElement).value;
+              setFieldValue('description', newDesc, false);
+            }}
           />
           <TypeRadioGroup<TransactionType>
             label="Type"
@@ -126,7 +131,7 @@ export default function TransactionForm() {
               <DateInput
                 label="date"
                 value={values.date}
-                setFieldValue={setFieldValue}
+                onChange={(value) => setFieldValue('date', value, false)}
                 error={errors.date || ''}
               />
             </Grid2>
@@ -134,7 +139,10 @@ export default function TransactionForm() {
           <AmountInput
             value={values.amount}
             error={errors.amount || ''}
-            onChange={handleChange}
+            onChange={(e: ChangeEvent) => {
+              const newAmount = (e.target as HTMLInputElement).value;
+              setFieldValue('amount', newAmount, false);
+            }}
           />
           <Box>
             <Button

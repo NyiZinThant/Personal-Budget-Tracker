@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { category } from '../models/category';
+import { Category } from '../models/category';
+import axiosInstance from '../axioConfig';
 
 const url = import.meta.env.VITE_API_URL;
-export const getCategories = async (): Promise<category[]> => {
+export const getCategories = async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<category[]>(`${url}/api/v1/categories`);
-    const categories: category[] = response.data;
+    const response = await axiosInstance.get<Category[]>(
+      `${url}/api/v1/categories`
+    );
+    const categories: Category[] = response.data;
     return categories;
   } catch (error) {
     if (axios.isAxiosError(error)) {

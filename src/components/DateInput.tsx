@@ -2,17 +2,18 @@ import { FormControl } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
+import { ChangeEvent, ChangeEventHandler, FocusEventHandler } from 'react';
 type DateInputProp = {
   label: string;
   value: Dayjs | null;
   error: string;
-  setFieldValue: Function;
+  onChange: (value: Dayjs | null) => void;
 };
 export default function DateInput({
   label,
   value,
   error,
-  setFieldValue,
+  onChange,
 }: DateInputProp) {
   return (
     <FormControl fullWidth error={error !== ''}>
@@ -20,7 +21,7 @@ export default function DateInput({
         <DatePicker
           label={label}
           value={value}
-          onChange={(date) => setFieldValue('date', date, false)}
+          onChange={onChange}
           slotProps={{
             textField: {
               helperText: error,

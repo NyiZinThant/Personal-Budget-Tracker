@@ -41,3 +41,10 @@ export const addTransaction = async function (
   storeTransactions(newTransactions);
   return newTransactions;
 };
+export const getToken = function () {
+  return localStorage.getItem('access_token');
+};
+
+export const storeToken = function (token: string) {
+  localStorage.setItem('access_token', token);
+};

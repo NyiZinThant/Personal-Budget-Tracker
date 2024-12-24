@@ -1,9 +1,12 @@
-import { Box, Button, Link, Paper, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router';
+import { Alert, Box, Button, Link, Paper, Typography } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router';
 import { Formik } from 'formik';
 import Input from '../components/ui/Input';
 import { ChangeEvent } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
+import { useLogin } from '../contexts/AuthContext';
+import { AuthType } from '../models/auth';
+import { storeToken } from '../libs/localStorage';
 
 type Values = {
   email: string;
@@ -18,6 +21,8 @@ type Errors = {
   confirmPassword?: string;
 };
 export default function LoginForm() {
+  const navigate = useNavigate();
+  const login = useLogin();
   const formValidator = (values: Values) => {
     const errors: Errors = {};
     if (!values.email) {
@@ -35,8 +40,14 @@ export default function LoginForm() {
         password: '',
       }}
       validate={formValidator}
-      onSubmit={(values: Values, { setSubmitting }) => {
+      onSubmit={async (values: Values, { setSubmitting }) => {
+        const data = await login?.loginUserMutate({ ...values });
+        if (login?.isError) {
+          return;
+        }
+        storeToken(data?.token ?? '');
         setSubmitting(false);
+        navigate('/');
       }}
     >
       {({ values, errors, handleSubmit, isSubmitting, setFieldValue }) => (
@@ -55,6 +66,9 @@ export default function LoginForm() {
           <Typography component={'h5'} variant="h5" sx={{ p: 1 }}>
             Login Your Account
           </Typography>
+          {login?.isError && (
+            <Alert severity="error">{login?.error.message}</Alert>
+          )}
           <Input
             label="Email"
             value={values.email}
