@@ -68,7 +68,12 @@ export default function TransactionForm() {
         const date = values.date?.toDate() || new Date();
         console.log(addTransactionMutation);
 
-        addTransactionMutation && addTransactionMutation({ ...values, date });
+        addTransactionMutation &&
+          addTransactionMutation({
+            ...values,
+            transaction_date: date,
+            categories: { name: values.category },
+          });
         setSubmitting(false);
         navigate('/');
       }}

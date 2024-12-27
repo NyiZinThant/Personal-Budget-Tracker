@@ -1,9 +1,11 @@
 import { categories } from '../utils/dataUtils';
 
 export type TransactionWithoutId = {
-  date: Date;
+  transaction_date: Date;
   description: string;
-  category: string;
+  categories: {
+    name: string;
+  };
   type: TransactionType;
   amount: number;
 };

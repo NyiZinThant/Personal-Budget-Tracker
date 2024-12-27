@@ -88,7 +88,14 @@ export const createData = function (
   }
   const dateObj: Date = new Date(date);
   if (isNaN(dateObj.getTime())) throw new Error('Invalid date format');
-  return { id, date: dateObj, description, category, type, amount };
+  return {
+    id,
+    transaction_date: dateObj,
+    description,
+    categories: { name: category },
+    type,
+    amount,
+  };
 };
 
 // columns for transaction table
@@ -109,10 +116,10 @@ export const filterData = function (
 // sorting transaction based on date or id
 export const sortDataBy = function (
   data: Transaction[],
-  col: 'date' | 'id' = 'id'
+  col: 'transaction_date' | 'id' = 'id'
 ) {
   const newData = [...data];
-  if (col === 'date') {
+  if (col === 'transaction_date') {
     newData.sort((a, b) => {
       return a[col].getTime() - b[col].getTime();
     });
@@ -144,7 +151,7 @@ export const getMonthlyExpenses = function (
   }
   for (const item of data) {
     if (item.type === 'Income') continue;
-    result[new Date(item.date).getMonth()].value += item.amount;
+    result[new Date(item.transaction_date).getMonth()].value += item.amount;
   }
   return result;
 };
@@ -174,7 +181,7 @@ export const getExpensesChartData = function (
   }
   let categories = data.reduce((prev: any, curr) => {
     if (curr.type === 'Income') return prev;
-    const category: string = curr.category;
+    const category: string = curr.categories.name;
     if (!(category in prev)) {
       prev[category] = curr.amount;
     } else {

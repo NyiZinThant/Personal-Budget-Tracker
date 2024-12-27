@@ -7,8 +7,10 @@ export const getTransactions = async (): Promise<Transaction[]> => {
   try {
     const response = await axiosInstance.get<Transaction[]>(`transactions`);
     const transactions: Transaction[] = response.data.map((transaction) => {
-      return { ...transaction, date: new Date(transaction.date) };
+      return { ...transaction, date: new Date(transaction.transaction_date) };
     });
+    console.log(transactions);
+
     return transactions;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -26,7 +28,7 @@ export const addTransaction = async function (
   try {
     await axiosInstance.post(`transactions`, {
       ...newTransaction,
-      date: newTransaction.date.toISOString().split('T')[0],
+      date: newTransaction.transaction_date.toISOString().split('T')[0],
     });
     console.log(newTransaction);
 

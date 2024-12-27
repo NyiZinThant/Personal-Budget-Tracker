@@ -15,7 +15,7 @@ export default function ExpensesTable() {
   const modifedDataRef = useRef(filterData(data, 'All'));
   modifedDataRef.current = !selected
     ? sortDataBy(modifedDataRef.current)
-    : sortDataBy(modifedDataRef.current, 'date');
+    : sortDataBy(modifedDataRef.current, 'transaction_date');
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: Alignment
@@ -26,7 +26,7 @@ export default function ExpensesTable() {
   const handleToggle = () => {
     modifedDataRef.current = selected
       ? sortDataBy(modifedDataRef.current)
-      : sortDataBy(modifedDataRef.current, 'date');
+      : sortDataBy(modifedDataRef.current, 'transaction_date');
     setSelected((prevSelected) => !prevSelected);
   };
   return (

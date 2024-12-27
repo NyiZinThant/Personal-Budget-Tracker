@@ -30,18 +30,35 @@ export default function Table({ columnNames, data }: TableProp) {
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              {Object.entries(row).map(([key, value]) => (
-                <TableCell
-                  component={'th'}
-                  scope="row"
-                  key={key}
-                  sx={{ bgcolor: key === 'category' ? stc(value) : undefined }}
-                >
-                  {value instanceof Date
-                    ? value.toLocaleDateString('en-CA')
-                    : value}
-                </TableCell>
-              ))}
+              {Object.entries(row).map(([key, value]) => {
+                if (
+                  typeof value === 'object' &&
+                  value != null &&
+                  !(value instanceof Date)
+                ) {
+                  return (
+                    <TableCell
+                      component={'th'}
+                      scope="row"
+                      key={key}
+                      sx={{
+                        bgcolor:
+                          key === 'category' ? stc(value.name) : undefined,
+                      }}
+                    >
+                      {value.name}
+                    </TableCell>
+                  );
+                } else {
+                  return (
+                    <TableCell component={'th'} scope="row" key={key}>
+                      {value instanceof Date
+                        ? value.toLocaleDateString('en-CA')
+                        : value}
+                    </TableCell>
+                  );
+                }
+              })}
             </TableRow>
           ))}
         </TableBody>
